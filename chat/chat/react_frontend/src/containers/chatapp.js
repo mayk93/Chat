@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 /* Actions */
-
+import { process_text } from '../actions/index';
 
 
 class ChatApp extends Component {
@@ -22,6 +22,9 @@ class ChatApp extends Component {
         super(props);
 
         this.state = {
+            last_response: "",
+            last_input: "",
+            conversation: ["Hello!"],
             endpoint: "/process_text/"
         };
     }
@@ -37,15 +40,21 @@ class ChatApp extends Component {
             <div>
                 <div className="jumbotron">
                     <div className="center">
-                        <textarea readOnly={true} className="form-control" rows="10" id="conversation_text_area">
-                        </textarea>
+                        <div className="chatBox" id="conversation_text_area" ref="conversation_text_area">
+                            { this.state.conversation.join("\n") }
+                        </div>
                         <br></br>
-                        <textarea className="form-control" rows="3" id="input_text_area">
+                        <textarea className="form-control chatBoxColor" rows="3"
+                                  id="input_text_area" ref="input_text_area">
                         </textarea>
                         <div className="center_button">
                             <button className="buttonStyle"
                                     onClick={() => {
-                                        this.setState({});
+                                        var new_input = this.refs.input_text_area.value;
+                                        this.setState({
+                                            last_input: new_input,
+                                            conversation: this.state.conversation.concat([new_input])
+                                        }, () => {this.refs.input_text_area.value = "";});
                                     }}>
                                 Send
                             </button>
@@ -62,11 +71,13 @@ class ChatApp extends Component {
 
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        text_process: state.text_process
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({ process_text }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatApp);
