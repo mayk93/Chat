@@ -36,9 +36,22 @@ class ChatApp extends Component {
         return (
             <div>
                 <div className="jumbotron">
-                    <div></div>
+                    <div className="center">
+                        <textarea readOnly={true} className="form-control" rows="10" id="conversation_text_area">
+                        </textarea>
+                        <br></br>
+                        <textarea className="form-control" rows="3" id="input_text_area">
+                        </textarea>
+                        <div className="center_button">
+                            <button className="buttonStyle"
+                                    onClick={() => {
+                                        this.setState({});
+                                    }}>
+                                Send
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
                 <div className="well">
                     Endpoint: {this.state.endpoint}
                 </div>
